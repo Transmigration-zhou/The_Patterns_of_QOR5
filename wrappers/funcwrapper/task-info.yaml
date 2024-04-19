@@ -1,0 +1,6 @@
+type: output
+files:
+  - name: main.go
+    visible: true
+  - name: go.mod
+    visible: false
