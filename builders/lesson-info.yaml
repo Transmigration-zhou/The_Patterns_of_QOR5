@@ -3,3 +3,4 @@ content:
   - restclient
   - multipartbuilder
   - htmlbuilder
+  - build-a-json-builder
