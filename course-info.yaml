@@ -1,0 +1,8 @@
+type: marketplace
+title: The Core of QOR5
+language: English
+summary: Introduce the important concepts of QOR5 and how to use them effectively
+  in your Go projects.
+programming_language: Go
+content:
+  - builders
