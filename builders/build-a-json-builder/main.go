@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -29,7 +30,9 @@ func main() {
 			),
 		),
 	)
-	fmt.Println(j)
+
+	b, _ := j.Marshal(context.TODO())
+	fmt.Println(string(b))
 }
 
 type Object struct {
@@ -55,4 +58,12 @@ func O(fs ...*Field) *Object {
 
 func A[V VT](vs ...V) *Array {
 	return &Array{}
+}
+
+type Component interface {
+	Marshal(ctx context.Context) ([]byte, error)
+}
+
+func (o *Object) Marshal(ctx context.Context) ([]byte, error) {
+	return nil, nil
 }
