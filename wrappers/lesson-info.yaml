@@ -2,3 +2,4 @@ content:
   - funcwrapper
   - interfacewrapper
   - http_handler_wrapper
+  - http_handler_wrapper_user_id

@@ -1,5 +1,7 @@
 # Wrapper for func
 
+Is a func that take a function as an argument and return a new function that does something before or after calling the original function.
+
 It also called middleware
 
 Use Cases
