@@ -12,3 +12,4 @@ Wrappers and decorators find applications in various scenarios, such as:
 - Authentication/Authorization: Adding a security layer to enforce access control rules on methods or resources.
 - Rate Limiting: Throttling the usage of a resource or API by wrapping it with a decorator that enforces limits on the number of calls or frequency of usage.
 - Monitoring: Instrumenting an object to collect metrics, track resource usage, or trigger alerts when certain conditions are met.
+- Dependency injection: Wrapping a function to provide additional dependencies or configuration to the original function.

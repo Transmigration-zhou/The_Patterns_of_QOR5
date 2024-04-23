@@ -3,3 +3,4 @@ content:
   - interfacewrapper
   - http_handler_wrapper
   - http_handler_wrapper_user
+  - http_handler_htmlgo

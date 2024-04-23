@@ -1,1 +1,1 @@
-# HTTP Handler Wrapper that support both user and db
+# Wrapper that provide additional parameters
