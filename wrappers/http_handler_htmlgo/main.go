@@ -21,7 +21,7 @@ func HandleHTMLComponent(fn HTMLGoHandler) WithDbAndUserHandlerFunc {
 		body := fn(w, r, db, user)
 		err := Fprint(w, body, r.Context())
 		if err != nil {
-			panic(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	}
 }
