@@ -35,6 +35,10 @@ func main() {
 	fmt.Println(string(b))
 }
 
+type Component interface {
+	Marshal(ctx context.Context) ([]byte, error)
+}
+
 type Object struct {
 }
 
@@ -44,24 +48,16 @@ type Field struct {
 type Array struct {
 }
 
-type VT interface {
-	string | int | int64 | bool | float64 | *Object | *Array
-}
-
-func F[V VT](name string, value V) *Field {
-	return &Field{}
+func F(name string, value interface{}) *Field {
+	return nil
 }
 
 func O(fs ...*Field) *Object {
-	return &Object{}
+	return nil
 }
 
-func A[V VT](vs ...V) *Array {
-	return &Array{}
-}
-
-type Component interface {
-	Marshal(ctx context.Context) ([]byte, error)
+func A(vs ...interface{}) *Array {
+	return nil
 }
 
 func (o *Object) Marshal(ctx context.Context) ([]byte, error) {
