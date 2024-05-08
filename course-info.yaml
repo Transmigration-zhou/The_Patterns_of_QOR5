@@ -7,3 +7,4 @@ programming_language: Go
 content:
   - builders
   - wrappers
+  - combine
