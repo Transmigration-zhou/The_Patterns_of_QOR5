@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/huandu/go-sqlbuilder"
 )
 
 func main() {
 	sb := sqlbuilder.NewSelectBuilder()
 
-	sb.Select("id").From("user").
+	sb.Select("id").
+		From("user").
 		Where(
 			sb.In("status", 1, 2, 5),
 			sb.Or(

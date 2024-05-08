@@ -3,6 +3,6 @@ content:
   - restclient
   - multipartbuilder
   - htmlbuilder
-  - build-a-json-builder
   - builder-for-optional-parameters
   - regexp-builder
+  - build-a-json-builder
