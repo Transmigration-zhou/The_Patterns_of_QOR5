@@ -4,9 +4,5 @@ files:
     visible: true
   - name: go.mod
     visible: false
-  - name: test/output.txt
-    visible: false
-  - name: test/input.txt
-    visible: false
   - name: go.sum
     visible: true

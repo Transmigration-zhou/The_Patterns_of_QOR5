@@ -3,6 +3,8 @@ title: The Patterns of QOR5
 language: English
 summary: Introduce the important concepts of QOR5 and how to use them effectively
   in your Go projects.
+vendor:
+  name: Sebastiane Christopher
 programming_language: Go
 content:
   - builders
