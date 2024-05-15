@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 )
 
@@ -40,26 +42,89 @@ type Component interface {
 }
 
 type Object struct {
+	fields []*Field
 }
 
 type Field struct {
+	k string
+	v interface{}
 }
 
 type Array struct {
+	values []interface{}
 }
 
 func F(name string, value interface{}) *Field {
-	return nil
+	return &Field{name, value}
 }
 
 func O(fs ...*Field) *Object {
-	return nil
+	return &Object{fs}
 }
 
 func A(vs ...interface{}) *Array {
-	return nil
+	return &Array{vs}
 }
 
 func (o *Object) Marshal(ctx context.Context) ([]byte, error) {
-	return nil, nil
+	buf := bytes.NewBuffer([]byte("{"))
+	for i, field := range o.fields {
+		if i > 0 {
+			buf.WriteByte(',')
+		}
+		b, err := field.Marshal(ctx)
+		if err != nil {
+			return nil, err
+		}
+		buf.Write(b)
+	}
+	buf.WriteByte('}')
+	return buf.Bytes(), nil
+}
+
+func (f *Field) Marshal(ctx context.Context) ([]byte, error) {
+	buf := bytes.NewBuffer([]byte("\""))
+	buf.WriteString(f.k)
+	buf.WriteByte('"')
+	buf.WriteByte(':')
+	switch v := f.v.(type) {
+	case Component:
+		b, err := v.Marshal(ctx)
+		if err != nil {
+			return nil, err
+		}
+		buf.Write(b)
+	default:
+		b, err := json.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+		buf.Write(b)
+	}
+	return buf.Bytes(), nil
+}
+
+func (a *Array) Marshal(ctx context.Context) ([]byte, error) {
+	buf := bytes.NewBuffer([]byte("["))
+	for i, value := range a.values {
+		if i > 0 {
+			buf.WriteByte(',')
+		}
+		switch v := value.(type) {
+		case Component:
+			b, err := v.Marshal(ctx)
+			if err != nil {
+				return nil, err
+			}
+			buf.Write(b)
+		default:
+			b, err := json.Marshal(v)
+			if err != nil {
+				return nil, err
+			}
+			buf.Write(b)
+		}
+	}
+	buf.WriteByte(']')
+	return buf.Bytes(), nil
 }
