@@ -8,21 +8,24 @@ import (
 	. "github.com/theplant/htmlgo"
 )
 
-func CSVSearchFuncWrapper(csvpath string, in SearchFunc) SearchFunc {
-	r := csv.NewReader(strings.NewReader(csvContent))
-	results, err := r.ReadAll()
-	if err != nil {
-		panic(err)
+func CSVSearchFuncWrapper(csvpath string) func(in SearchFunc) SearchFunc {
+	return func(in SearchFunc) SearchFunc {
+		r := csv.NewReader(strings.NewReader(csvContent))
+		results, err := r.ReadAll()
+		if err != nil {
+			panic(err)
+		}
+		return func(keyword string) ([][]string, error) {
+			return results, nil
+		}
 	}
-	return func(keyword string) ([][]string, error) {
-		return results, nil
-	}
+
 }
 
 func main() {
 	b := New().
-		SearchFunc(
-			CSVSearchFuncWrapper("test.csv", nil),
+		WrapSearchFunc(
+			CSVSearchFuncWrapper("test.csv"),
 		)
 	http.Handle("/", b)
 	http.ListenAndServe(":8080", nil)
@@ -31,12 +34,12 @@ func main() {
 type SearchFunc func(keyword string) ([][]string, error)
 
 type Builder struct {
-	Searcher SearchFunc
+	searcher SearchFunc
 }
 
 func New() *Builder {
 	return &Builder{
-		Searcher: func(keyword string) ([][]string, error) {
+		searcher: func(keyword string) ([][]string, error) {
 			return [][]string{
 				{"hello", "world"},
 			}, nil
@@ -44,14 +47,14 @@ func New() *Builder {
 	}
 }
 
-func (b *Builder) SearchFunc(v SearchFunc) *Builder {
-	b.Searcher = v
+func (b *Builder) WrapSearchFunc(w func(in SearchFunc) SearchFunc) *Builder {
+	b.searcher = w(b.searcher)
 	return b
 }
 
 func (b *Builder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	keyword := r.FormValue("keyword")
-	rows, err := b.Searcher(keyword)
+	rows, err := b.searcher(keyword)
 	if err != nil {
 		panic(err)
 	}
