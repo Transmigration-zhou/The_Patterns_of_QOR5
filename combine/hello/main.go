@@ -15,12 +15,12 @@ func main() {
 type SearchFunc func(keyword string) ([][]string, error)
 
 type Builder struct {
-	Searcher SearchFunc
+	searcher SearchFunc
 }
 
 func New() *Builder {
 	return &Builder{
-		Searcher: func(keyword string) ([][]string, error) {
+		searcher: func(keyword string) ([][]string, error) {
 			return [][]string{
 				{"hello", "world"},
 			}, nil
@@ -28,14 +28,14 @@ func New() *Builder {
 	}
 }
 
-func (b *Builder) SearchFunc(v SearchFunc) *Builder {
-	b.Searcher = v
+func (b *Builder) WrapSearchFunc(w func(in SearchFunc) SearchFunc) *Builder {
+	b.searcher = w(b.searcher)
 	return b
 }
 
 func (b *Builder) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	keyword := r.FormValue("keyword")
-	rows, err := b.Searcher(keyword)
+	rows, err := b.searcher(keyword)
 	if err != nil {
 		panic(err)
 	}
